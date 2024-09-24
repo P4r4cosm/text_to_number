@@ -15,14 +15,7 @@ namespace text_to_number
         public Form1()
         {
             InitializeComponent();
-        }
-        
-        void Swap <T>(ref T x, ref T y)
-        {
-            T z = x;
-            x= y;
-            y= z;
-        }
+        }    
         private void button1_Click(object sender, EventArgs e)
         {
             string[] str = number.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -89,7 +82,6 @@ namespace text_to_number
                         r--;
                         l--;
                         string answer = "";
-                        string range = "";
 
                         for (int i = 0; i < l; i++)
                         {
