@@ -15,45 +15,91 @@ namespace text_to_number
         public Form1()
         {
             InitializeComponent();
-        }    
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             string[] str = number.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (str.Length==0)
+            if (str.Length == 0)
             {
                 MessageBox.Show("Вы ничего не ввели!!!");
             }
-            string[] units = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять","десять",
-                    "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
-                   "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" };
-            string[] tens = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
-                  "восемьдесят", "девяносто" };
-            string[] hundreds = {"сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
-                      "восемьсот", "девятьсот" };
-            int result = 0;
-            
-            for (int i=0; i<str.Length; i++)
+            else if (str.Length > 3)
             {
-                
-                if (Array.IndexOf(units, str[i].ToLower())> -1)
-                {
-                    result += Array.IndexOf(units, str[i].ToLower());
-                    continue;
-                }
-                if (Array.IndexOf(tens, str[i].ToLower()) > -1)
-                {
-                    result += (Array.IndexOf(tens, str[i].ToLower()) +2)*10;
-                    continue;
-                }
-                if (Array.IndexOf(hundreds, str[i].ToLower()) > -1)
-                {
-                    result += (Array.IndexOf(hundreds, str[i].ToLower()) +1)*100;
-                    continue;
-                }
-                MessageBox.Show($"Введённое вами слово {str[i]} не является числительным");
+                MessageBox.Show($"Трёхзначное число не может состоять из {str.Length} слов");
             }
-            answer1.Text=result.ToString();
-        }//задача 1
+            else
+            {
+                string[] units = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять","десять",
+            "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+           "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" };
+                string[] tens = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
+          "восемьдесят", "девяносто" };
+                string[] hundreds = {"сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
+              "восемьсот", "девятьсот" };
+                int result = 0;
+                int lastPart = 3; // 3 - сотни, 2 - десятки, 1 - единицы
+
+                for (int i = 0; i < str.Length; i++)
+                {
+                    int currentPart = 0;
+
+                    if (Array.IndexOf(hundreds, str[i].ToLower()) > -1)
+                    {
+                        currentPart = 3; // Сотни
+                        if (currentPart <= lastPart)
+                        {
+                            result += (Array.IndexOf(hundreds, str[i].ToLower()) + 1) * 100;
+                            lastPart = currentPart;
+                            continue;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Неверный порядок: сотни должны быть первыми");
+                            answer1.Text = i.ToString();
+                            return;
+                        }
+                    }
+
+                    if (Array.IndexOf(tens, str[i].ToLower()) > -1)
+                    {
+                        currentPart = 2; // Десятки
+                        if (currentPart <= lastPart)
+                        {
+                            result += (Array.IndexOf(tens, str[i].ToLower()) + 2) * 10;
+                            lastPart = currentPart;
+                            continue;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Неверный порядок: десятки должны идти перед единицами, но после сотен");
+                            return;
+                        }
+                    }
+
+                    if (Array.IndexOf(units, str[i].ToLower()) > -1)
+                    {
+                        currentPart = 1; // Единицы
+                        if (currentPart <= lastPart)
+                        {
+                            result += Array.IndexOf(units, str[i].ToLower());
+                            lastPart = currentPart;
+                            continue;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Неверный порядок: единицы должны быть последними");
+                            return;
+                        }
+                    }
+
+                    MessageBox.Show($"Введённое вами слово {str[i]} не является числительным");
+                    return;
+                }
+
+                answer1.Text = result.ToString();
+            }
+        }
+        //задача 1
 
         private void Ответ_Click(object sender, EventArgs e)
         {
