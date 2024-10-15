@@ -23,78 +23,83 @@ namespace text_to_number
             {
                 MessageBox.Show("Вы ничего не ввели!!!");
             }
-            else if (str.Length > 3)
-            {
-                MessageBox.Show($"Трёхзначное число не может состоять из {str.Length} слов");
-            }
             else
             {
-                string[] units = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять","десять",
+                string[] units = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"};
+                string[] ten_nineteen = {"десять",
             "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
-           "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" };
+           "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"};
                 string[] tens = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
           "восемьдесят", "девяносто" };
                 string[] hundreds = {"сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
               "восемьсот", "девятьсот" };
                 int result = 0;
-                int lastPart = 3; // 3 - сотни, 2 - десятки, 1 - единицы
 
+                string flag = "";
                 for (int i = 0; i < str.Length; i++)
                 {
-                    int currentPart = 0;
-
-                    if (Array.IndexOf(hundreds, str[i].ToLower()) > -1)
+                    if (hundreds.Contains(str[i].ToLower()))
                     {
-                        currentPart = 3; // Сотни
-                        if (currentPart <= lastPart)
+                        if (flag=="")
                         {
+                            flag = "hundreds";
                             result += (Array.IndexOf(hundreds, str[i].ToLower()) + 1) * 100;
-                            lastPart = currentPart;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show("Неверный порядок: сотни должны быть первыми");
-                            answer1.Text = i.ToString();
+                            MessageBox.Show($"{str[i]} должно быть первым и не может быть после сотен");
                             return;
                         }
+                       
                     }
-
-                    if (Array.IndexOf(tens, str[i].ToLower()) > -1)
+                    if (tens.Contains(str[i].ToLower()))
                     {
-                        currentPart = 2; // Десятки
-                        if (currentPart <= lastPart)
+                        if (flag == "" || flag == "hundreds")
                         {
+                            flag = "tens";
                             result += (Array.IndexOf(tens, str[i].ToLower()) + 2) * 10;
-                            lastPart = currentPart;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show("Неверный порядок: десятки должны идти перед единицами, но после сотен");
+                            MessageBox.Show($"{str[i]} не может быть после единиц или десятков");
                             return;
                         }
                     }
-
-                    if (Array.IndexOf(units, str[i].ToLower()) > -1)
+                    if (ten_nineteen.Contains(str[i].ToLower()))
                     {
-                        currentPart = 1; // Единицы
-                        if (currentPart <= lastPart)
+                        if (flag==""||flag== "hundreds")
                         {
+                            flag = "10-19";
+                            result += Array.IndexOf(ten_nineteen, str[i].ToLower())+10;
+                            continue ;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"{str[i]} не может быть после десятков / единиц");
+                            return;
+                        }
+                    }
+                    if (units.Contains(str[i].ToLower()))
+                    {
+                        if (flag == "" || flag == "hundreds" || flag=="tens")
+                        {
+                            flag = "units";
                             result += Array.IndexOf(units, str[i].ToLower());
-                            lastPart = currentPart;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show("Неверный порядок: единицы должны быть последними");
+                            MessageBox.Show("Единицы не могут быть после единиц");
                             return;
                         }
                     }
-
-                    MessageBox.Show($"Введённое вами слово {str[i]} не является числительным");
+                    MessageBox.Show($"{str[i]} не входит в единицы, сотни, десятки");
                     return;
                 }
+
+                
 
                 answer1.Text = result.ToString();
             }
