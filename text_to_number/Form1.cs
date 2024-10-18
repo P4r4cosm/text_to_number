@@ -12,6 +12,14 @@ namespace text_to_number
 {
     public partial class Form1 : Form
     {
+        string[] units = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять" };
+        string[] ten_nineteen = {"десять",
+            "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+           "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"};
+        string[] tens = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
+          "восемьдесят", "девяносто" };
+        string[] hundreds = {"сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
+              "восемьсот", "девятьсот" };
         public Form1()
         {
             InitializeComponent();
@@ -25,16 +33,7 @@ namespace text_to_number
             }
             else
             {
-                string[] units = { "ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"};
-                string[] ten_nineteen = {"десять",
-            "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
-           "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"};
-                string[] tens = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят",
-          "восемьдесят", "девяносто" };
-                string[] hundreds = {"сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот",
-              "восемьсот", "девятьсот" };
                 int result = 0;
-
                 string flag = "";
                 for (int i = 0; i < str.Length; i++)
                 {
@@ -42,34 +41,34 @@ namespace text_to_number
                     {
                         if (flag=="")
                         {
-                            flag = "hundreds";
+                            flag = "сотен";
                             result += (Array.IndexOf(hundreds, str[i].ToLower()) + 1) * 100;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} должно быть первым и не может быть после сотен");
+                            MessageBox.Show($"{str[i]} не может быть после {str[i-1]} \n(сотни не могут идти после {flag})");
                             return;
                         }
                        
                     }
                     if (tens.Contains(str[i].ToLower()))
                     {
-                        if (flag == "" || flag == "hundreds")
+                        if (flag == "" || flag == "сотен")
                         {
-                            flag = "tens";
+                            flag = "десятков";
                             result += (Array.IndexOf(tens, str[i].ToLower()) + 2) * 10;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} (единиц или десятков)");
+                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} \n(десятки не могут идти после {flag})");
                             return;
                         }
                     }
                     if (ten_nineteen.Contains(str[i].ToLower()))
                     {
-                        if (flag==""||flag== "hundreds")
+                        if (flag==""||flag== "сотен")
                         {
                             flag = "10-19";
                             result += Array.IndexOf(ten_nineteen, str[i].ToLower())+10;
@@ -77,35 +76,21 @@ namespace text_to_number
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} десятков / единиц");
-                            return;
-                        }
-                    }
-                    if (ten_nineteen.Contains(str[i].ToLower()))
-                    {
-                        if (flag == "" || flag == "hundreds")
-                        {
-                            flag = "10-19";
-                            result += Array.IndexOf(ten_nineteen, str[i].ToLower()) + 10;
-                            continue;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Неверный порядок: десятки должны идти перед единицами, но после сотен");
+                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]}\n(10-19 не может быть после {flag})");
                             return;
                         }
                     }
                     if (units.Contains(str[i].ToLower()))
                     {
-                        if (flag == "" || flag == "hundreds" || flag=="tens")
+                        if (flag == "" || flag == "сотен" || flag=="десятков")
                         {
-                            flag = "units";
+                            flag = "единиц";
                             result += Array.IndexOf(units, str[i].ToLower());
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show($"Единицы не могут быть после: {str[i-1]} (единиц/ 10-19)");
+                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} \n(единицы не могут быть после {flag})");
                             return;
                         }
                     }
