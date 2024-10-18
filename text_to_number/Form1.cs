@@ -81,6 +81,20 @@ namespace text_to_number
                             return;
                         }
                     }
+                    if (ten_nineteen.Contains(str[i].ToLower()))
+                    {
+                        if (flag == "" || flag == "hundreds")
+                        {
+                            flag = "10-19";
+                            result += Array.IndexOf(ten_nineteen, str[i].ToLower()) + 10;
+                            continue;
+                        }
+                        else
+                        {
+                            Mehow("Неверный порядок: десятки должны идти перед единицами, но после сотен");
+                            return;
+                        }
+                    }
                     if (units.Contains(str[i].ToLower()))
                     {
                         if (flag == "" || flag == "hundreds" || flag=="tens")
