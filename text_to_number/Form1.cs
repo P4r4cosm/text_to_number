@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace text_to_number
@@ -41,56 +35,56 @@ namespace text_to_number
                     {
                         if (flag=="")
                         {
-                            flag = "сотен";
+                            flag = "числа формата сотен";
                             result += (Array.IndexOf(hundreds, str[i].ToLower()) + 1) * 100;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} не может быть после {str[i-1]} \n(сотни не могут идти после {flag})");
+                            MessageBox.Show($"{str[i]} не может быть после {str[i-1]} \n(число формата сотен не может идти после {flag})");
                             return;
                         }
                        
                     }
                     if (tens.Contains(str[i].ToLower()))
                     {
-                        if (flag == "" || flag == "сотен")
+                        if (flag == "" || flag == "числа формата сотен")
                         {
-                            flag = "десятков";
+                            flag = "числа десятичного формата";
                             result += (Array.IndexOf(tens, str[i].ToLower()) + 2) * 10;
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} \n(десятки не могут идти после {flag})");
+                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} \n(число десятичного формата не может идти после {flag})");
                             return;
                         }
                     }
                     if (ten_nineteen.Contains(str[i].ToLower()))
                     {
-                        if (flag==""||flag== "сотен")
+                        if (flag==""||flag== "числа формата сотен")
                         {
-                            flag = "10-19";
+                            flag = "числа формата 10-19";
                             result += Array.IndexOf(ten_nineteen, str[i].ToLower())+10;
                             continue ;
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]}\n(10-19 не может быть после {flag})");
+                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]}\n(число формата 10-19 не может быть после {flag})");
                             return;
                         }
                     }
                     if (units.Contains(str[i].ToLower()))
                     {
-                        if (flag == "" || flag == "сотен" || flag=="десятков")
+                        if (flag == "" || flag == "числа формата сотен" || flag== "числа десятичного формата")
                         {
-                            flag = "единиц";
+                            flag = "числа единичного форма";
                             result += Array.IndexOf(units, str[i].ToLower());
                             continue;
                         }
                         else
                         {
-                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} \n(единицы не могут быть после {flag})");
+                            MessageBox.Show($"{str[i]} не может быть после: {str[i-1]} \n(число единичного формата не может быть после {flag})");
                             return;
                         }
                     }
@@ -123,7 +117,7 @@ namespace text_to_number
                 {
 
                     string[] str = Text.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (r > str.Length || l > str.Length || r<=l || r<=1 || l<1)
+                    if (r > str.Length || l > str.Length || r<l || r<1 || l<1)
                     {
                         MessageBox.Show("Вы ввели некорректные значения");
                     }
